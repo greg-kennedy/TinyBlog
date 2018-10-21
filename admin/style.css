@@ -1,0 +1,70 @@
+html {
+  background-color: silver;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+
+  background-color: white;
+  border: 1px solid black;
+}
+
+body>header {
+  margin: 10px;
+
+  background-color: blue;
+  border: 1px solid;
+}
+
+body>header>h1 {
+  text-align: center;
+  color: white;
+}
+
+div#wrap {
+  display: flex;
+  flex-direction: row;
+
+  flex: 1;
+}
+
+aside {
+  display: flex;
+  flex-direction: column;
+
+  margin-left: 10px;
+  margin-right: 5px;
+
+  background-color: peru;
+  border: 1px solid;
+}
+
+main {
+  margin-left: 5px;
+  margin-right: 10px;
+  border: 1px solid;
+
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+
+  flex: 1;
+}
+
+article {
+  margin: 10px;
+  border: 1px solid;
+
+  display: flex;
+  flex-direction: column;
+}
+
+footer {
+  /* position: fixed; */
+  /* bottom: 0; */
+  /* height: 50px; */
+  margin: 10px;
+  background-color: green;
+  /* width: 100%; */
+}
