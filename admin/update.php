@@ -7,7 +7,7 @@
 function create_post($id)
 {
   //  Open the sqlite3 database
-  $db = new SQLite3('tinycms.db', SQLITE3_OPEN_READONLY);
+  $db = new SQLite3('tinyblog.db', SQLITE3_OPEN_READONLY);
   $db->enableExceptions(TRUE);
 
   /* Retrieve settings */
@@ -92,7 +92,7 @@ HTML;
 function create_index()
 {
   //  Open the sqlite3 database
-  $db = new SQLite3('tinycms.db', SQLITE3_OPEN_READONLY);
+  $db = new SQLite3('tinyblog.db', SQLITE3_OPEN_READONLY);
   $db->enableExceptions(TRUE);
 
   /* Retrieve settings */
@@ -185,7 +185,7 @@ HTML;
 function create_archive()
 {
   //  Open the sqlite3 database
-  $db = new SQLite3('tinycms.db', SQLITE3_OPEN_READONLY);
+  $db = new SQLite3('tinyblog.db', SQLITE3_OPEN_READONLY);
   $db->enableExceptions(TRUE);
 
   /* Retrieve settings */

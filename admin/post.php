@@ -8,7 +8,7 @@
   $post = $_POST['post'];
 
   //  Open the sqlite3 database
-  $db = new SQLite3('tinycms.db', SQLITE3_OPEN_READWRITE);
+  $db = new SQLite3('tinyblog.db', SQLITE3_OPEN_READWRITE);
   $db->enableExceptions(TRUE);
 
   // get the post ID

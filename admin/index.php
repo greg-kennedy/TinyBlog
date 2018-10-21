@@ -9,7 +9,7 @@
   <header id="banner">TinyBlog Admin Menu</header>
 <?php
   // Open the sqlite3 database
-  $db = new SQLite3('tinycms.db', SQLITE3_OPEN_READONLY);
+  $db = new SQLite3('tinyblog.db', SQLITE3_OPEN_READONLY);
   $db->enableExceptions(TRUE);
 ?>
   <div id="wrap">

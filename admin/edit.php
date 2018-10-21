@@ -16,7 +16,7 @@
     $id = $_GET['id'];
 
     //  Open the sqlite3 database
-    $db = new SQLite3('tinycms.db', SQLITE3_OPEN_READONLY);
+    $db = new SQLite3('tinyblog.db', SQLITE3_OPEN_READONLY);
     $db->enableExceptions(TRUE);
 
     $stmt = $db->prepare('SELECT date, title, post FROM posts WHERE id=:id');
