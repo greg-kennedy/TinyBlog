@@ -35,10 +35,14 @@
       <table>
        <tr><th>Key</th><th>Value</th></tr>
 <?php
-  $result = $db->query('SELECT key, description, value FROM settings');
+  $descriptions = [
+    'name' => 'Blog Name'
+  ];
+
+  $result = $db->query('SELECT key, value FROM settings');
   while ($row = $result->fetchArray(SQLITE3_NUM)) {
-    echo '<tr><td><label for="', $row[0], '">', $row[1], '</label></td><td>',
-      '<input type="text" name="', $row[0], '" value="', $row[2], "\"</td></tr>\n";
+    echo '<tr><td><label for="', $row[0], '">', $descriptions[$row[0]], '</label></td><td>',
+      '<input type="text" name="', $row[0], '" value="', $row[1], "\"</td></tr>\n";
   }
   $result->finalize();
 ?>
@@ -51,6 +55,6 @@
 <?php
   $db->close();
 ?>
-  <footer>TinyBlog by Greg Kennedy</footer>
+  <footer><a href="https://github.com/greg-kennedy/TinyBlog">Powered by TinyBlog</a></footer>
  </body>
 </html>
