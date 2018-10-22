@@ -1,4 +1,6 @@
 <?php
+  require_once('auth.php');
+
   require_once('update.php');
 
   /* Commits a new post to the db */
@@ -35,17 +37,22 @@
     $id = $db->lastInsertRowId();
   }
 
-  //echo $db->changes(), " rows changed.";
-  $db->close();
+  if ($db->changes()) {
+    // bake new post
+    create_post($db,$id);
+    // update the index page
+    create_index($db);
+    // update the archive page
+    create_archive($db);
 
-  // bake new post
-  create_post($id);
-  // update the index page
-  create_index();
-  // update the archive page
-  create_archive();
+    // close the db handle, all done
+    $db->close();
 
-  // redirect to post
-  header('Location: ../post/' . $id . '.html');
-  exit();
+    // redirect to post
+    header('Location: ../post/' . $id . '.html');
+    exit();
+  } else {
+    // Something went wrong.
+    $db->close();
+  }
 ?>

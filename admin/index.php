@@ -1,3 +1,6 @@
+<?php
+  require_once('auth.php');
+?>
 <!DOCTYPE html>
 <html>
  <head>
@@ -13,7 +16,7 @@
   $db->enableExceptions(TRUE);
 ?>
   <div id="wrap">
-   <aside>&nbsp;</aside>
+<!--   <aside>&nbsp;</aside> -->
    <main>
     <article>
      <header>Post Management</header>
@@ -36,7 +39,8 @@
        <tr><th>Key</th><th>Value</th></tr>
 <?php
   $descriptions = [
-    'name' => 'Blog Name'
+    'name' => 'Blog Name',
+    'password' => 'Blog Password'
   ];
 
   $result = $db->query('SELECT key, value FROM settings');
