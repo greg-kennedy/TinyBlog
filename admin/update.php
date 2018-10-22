@@ -3,13 +3,20 @@
 /* TinyBlog Update Script
     Re-renders all HTML documents in the parent folder. */
 
-/* Bakes a new post at a specified URL. */
-function create_post($id)
+/* Re-creates ALL posts */
+function create_all_posts($db)
 {
-  //  Open the sqlite3 database
-  $db = new SQLite3('tinyblog.db', SQLITE3_OPEN_READONLY);
-  $db->enableExceptions(TRUE);
+  /* Retrieve settings */
+  $result = $db->query('SELECT id FROM posts');
+  while ($row = $result->fetchArray(SQLITE3_NUM)) {
+    create_post($db, $row[0]);
+  }
+  $result->finalize();
+}
 
+/* Bakes a new post at a specified URL. */
+function create_post($db, $id)
+{
   /* Retrieve settings */
   $result = $db->query('SELECT key, value FROM settings');
   while ($row = $result->fetchArray(SQLITE3_NUM)) {
@@ -34,7 +41,6 @@ function create_post($id)
   }
   $result->finalize();
   $stmt->close();
-  $db->close();
 
   if (! $num_rows) {
     throw new Exception("id '$id' did not match any posts in database");
@@ -60,7 +66,7 @@ function create_post($id)
       <h2>Other</h2>
      </header>
      <ul>
-      <li><a href="../archive.html">CMS Archive</a></li>
+      <li><a href="../archive.html">Blog Archive</a></li>
       <li><a href="../admin">Admin Area</a></li>
      </ul>
     </nav>
@@ -89,12 +95,8 @@ HTML;
 }
 
 /* Bakes a new Index page. */
-function create_index()
+function create_index($db)
 {
-  //  Open the sqlite3 database
-  $db = new SQLite3('tinyblog.db', SQLITE3_OPEN_READONLY);
-  $db->enableExceptions(TRUE);
-
   /* Retrieve settings */
   $result = $db->query('SELECT key, value FROM settings');
   while ($row = $result->fetchArray(SQLITE3_NUM)) {
@@ -119,11 +121,10 @@ function create_index()
   }
   $result->finalize();
   $stmt->close();
-  $db->close();
 
   if (! $num_rows) {
     // TODO: empty blog, replace with boilerplate
-    throw new Exception("id '$id' did not match any posts in database");
+    throw new Exception('Cannot create index.html: no posts in database');
   }
 
   // bake the post
@@ -146,7 +147,7 @@ function create_index()
       <h2>Other</h2>
      </header>
      <ul>
-      <li><a href="archive.html">CMS Archive</a></li>
+      <li><a href="archive.html">Blog Archive</a></li>
       <li><a href="admin">Admin Area</a></li>
      </ul>
     </nav>
@@ -182,12 +183,8 @@ HTML;
   fclose($file);
 }
 
-function create_archive()
+function create_archive($db)
 {
-  //  Open the sqlite3 database
-  $db = new SQLite3('tinyblog.db', SQLITE3_OPEN_READONLY);
-  $db->enableExceptions(TRUE);
-
   /* Retrieve settings */
   $result = $db->query('SELECT key, value FROM settings');
   while ($row = $result->fetchArray(SQLITE3_NUM)) {
@@ -211,12 +208,13 @@ function create_archive()
   }
   $result->finalize();
   $stmt->close();
-  $db->close();
 
+/*
   if (! $num_rows) {
     // TODO: empty blog, replace with boilerplate
     throw new Exception("id '$id' did not match any posts in database");
   }
+*/
 
   // bake the post
   $html = <<<HTML
@@ -224,7 +222,7 @@ function create_archive()
 <html>
  <head>
   <meta charset="UTF-8">
-  <title>$title - $blog_name</title>
+  <title>Archive - $blog_name</title>
   <link rel="stylesheet" type="text/css" href="style.css">
  </head>
  <body>
@@ -238,7 +236,7 @@ function create_archive()
       <h2>Other</h2>
      </header>
      <ul>
-      <li><a href="archive.html">CMS Archive</a></li>
+      <li><a href="archive.html">Blog Archive</a></li>
       <li><a href="admin">Admin Area</a></li>
      </ul>
     </nav>
@@ -246,7 +244,7 @@ function create_archive()
    <main>
     <article>
      <header class="title">
-      <h2>CMS Archive</h2>
+      <h2>Blog Archive</h2>
       <p>Complete list of posts:</p>
      </header>
      <section>
