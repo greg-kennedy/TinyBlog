@@ -9,14 +9,24 @@
   <link rel="stylesheet" type="text/css" href="style.css">
  </head>
  <body>
-  <header id="banner">TinyBlog Admin Menu</header>
+  <header id="banner"><h1>TinyBlog Admin Menu</h1></header>
 <?php
   // Open the sqlite3 database
   $db = new SQLite3('tinyblog.db', SQLITE3_OPEN_READONLY);
   $db->enableExceptions(TRUE);
 ?>
   <div id="wrap">
-<!--   <aside>&nbsp;</aside> -->
+   <aside>
+    <nav>
+     <header>
+      <h2>Navigation</h2>
+     </header>
+     <ul>
+      <li><a href="../index.html">Blog Index</a></li>
+      <li><a href="logout.php">Log Out</a></li>
+     </ul>
+    </nav>
+   </aside>
    <main>
     <article>
      <header>Post Management</header>

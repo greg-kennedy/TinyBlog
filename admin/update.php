@@ -159,7 +159,7 @@ HTML;
     $html .= <<<HTML
     <article>
      <header class="title">
-      <h2>$title[$i]</h2>
+      <h2><a href="post/$id[$i].html">$title[$i]</a></h2>
       <p>$date[$i]</p>
      </header>
      <section>
