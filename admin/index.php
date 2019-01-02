@@ -34,9 +34,10 @@
       <tr><th>Date</th><th>Title</th><th>Action</th></tr>
       <tr><td>&nbsp;</td><td><i>New Post</i></td><td><a href="edit.php">Edit</a></td></tr>
 <?php
-  $result = $db->query('SELECT id, date, title FROM posts');
+  // Fill the Posts table with all posts in the db, newest first
+  $result = $db->query('SELECT id, date, title FROM posts ORDER BY date DESC');
   while ($row = $result->fetchArray(SQLITE3_NUM)) {
-    echo '<tr><td>', $row[1], '</td><td>', $row[2], '</td><td><a href="edit.php?id=', $row[0], '">Edit</a></td></tr>';
+    echo '<tr><td>', date(DATE_RFC2822, $row[1]), '</td><td>', $row[2], '</td><td><a href="edit.php?id=', $row[0], '">Edit</a></td></tr>';
   }
   $result->finalize();
 ?>
@@ -48,6 +49,7 @@
       <table>
        <tr><th>Key</th><th>Value</th></tr>
 <?php
+  // Site Settings: read all key/value pairs from DB, and use to fill the table.
   $descriptions = [
     'name' => 'Blog Name',
     'password' => 'Blog Password'
@@ -67,6 +69,7 @@
    </main>
   </div>
 <?php
+  // all done with the db, close it.
   $db->close();
 ?>
   <footer><a href="https://github.com/greg-kennedy/TinyBlog">Powered by TinyBlog</a></footer>

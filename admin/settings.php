@@ -1,4 +1,8 @@
 <?php
+  // user must be logged in...
+  require_once('auth.php');
+
+  // functions to update HTML files
   require_once('update.php');
 
   /* New settings */
@@ -22,6 +26,7 @@
   $stmt->close();
 
   // get list of all posts we need to go re-create
+/*
   $result = $db->query('SELECT id FROM posts');
   $num_rows = 0;
 
@@ -29,6 +34,7 @@
     $ids[] = $row[0];
   }
   $result->finalize();
+*/
 
   if ($changed_rows > 0)
   {
@@ -39,6 +45,9 @@
     // update the archive page
     create_archive($db);
   }
+
+  // all done with the db
+  $db->close();
 
   // redirect to settings again
   header('Location: index.php');

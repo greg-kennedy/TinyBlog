@@ -2,11 +2,11 @@
 TinyBlog is a very small blog engine written in PHP.
 
 ## Origin
-TinyBlog grew out of frustration wrangling with Wordpress for a personal blog.  Like most popular software today, Wordpress is aimed at "web-scale" enterprise users with a million viewers and dozens of authors and editors.  It is a fantastic bit of engineering that is also woefully overkill for a casual blog with infrequent updates and only occasional readers.
+TinyBlog grew out of frustration wrangling with Wordpress for a personal blog.  Like most popular software today, Wordpress is aimed at "web-scale" enterprise users with a million viewers and dozens of authors and editors.  It is a fantastic bit of engineering that is also extremely overkill for a casual blog with infrequent updates and only occasional readers.
 
 The fundamentals of blog posting haven't changed much since the days of Livejournal.  You make a post, you can add some tags, you can edit or delete previous posts.  There's an archive, and pages of history, and that's it.
 
-It is woefully complex and inefficient to require a full CMS to recreate that experience.
+It is stupidly complex and inefficient to require a full CMS to recreate that experience.
 
 ## Design
 TinyBlog does things differently.  All blog pages are static .html files, containing no Javascript, and no dynamic server-side code.  There is an sqlite3 database, but only for the Admin Area: it is used when making a new post or site changes, to rebuild touched pages from scratch.

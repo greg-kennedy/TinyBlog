@@ -7,7 +7,7 @@ if ( isset( $_POST['password'] ) ) {
   $db = new SQLite3('tinyblog.db', SQLITE3_OPEN_READONLY);
   $db->enableExceptions(TRUE);
   
-  /* Retrieve settings */
+  // Retrieve settings
   $result = $db->query('SELECT value FROM settings WHERE key="password"');
   while ($row = $result->fetchArray(SQLITE3_NUM)) {
     $db_password = $row[0];
@@ -21,6 +21,8 @@ if ( isset( $_POST['password'] ) ) {
     $_SESSION['authorized'] = true;
     session_write_close();
 
+    // login succeeded so go to the index.
+    //  otherwise it falls through to the login page again.
     header('Location: index.php');
   }
 }

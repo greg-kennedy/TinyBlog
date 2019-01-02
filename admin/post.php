@@ -1,6 +1,8 @@
 <?php
+  // user must be logged in...
   require_once('auth.php');
 
+  // functions to update HTML files
   require_once('update.php');
 
   /* Commits a new post to the db */

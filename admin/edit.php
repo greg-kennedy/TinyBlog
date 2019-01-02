@@ -48,22 +48,26 @@
     $post = '';
   }
 ?>
-   <main>
-    <article>
-     <header>
-      <h2>Post Management</h2>
-     </header>
-   <form action="post.php" method="POST">
+  <main>
+   <article>
+    <header>
+     <h2>Post Management</h2>
+    </header>
+    <form action="post.php" method="POST">
 <?php if (isset($id)) { echo '<input type="hidden" name="id" value="', $id, '">'; } ?>
-    <label for="date">Date</label>
-    <input type=datetime-local" name="date" value="<?php echo $date ?>">
-    <label for="title">Title</label>
-    <input name="title" value="<?php echo $title ?>">
-    <label for="post">Post</label>
-    <textarea name="post"><?php echo $post ?></textarea>
-    <button>Save</button>
-    <a href="index.php">Cancel</a>
-   </form>
-  </article>
+     <label for="date">Date</label>
+     <input type=datetime-local" name="date" value="<?php echo $date ?>">
+     <br>
+     <label for="title">Title</label>
+     <input name="title" value="<?php echo $title ?>">
+     <br>
+     <label for="post">Post</label>
+     <br>
+     <textarea name="post"><?php echo $post ?></textarea>
+     <button>Save</button>
+     <a href="index.php">Cancel</a>
+    </form>
+   </article>
+  </main>
  </body>
 </html>
