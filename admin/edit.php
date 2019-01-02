@@ -56,7 +56,7 @@
     <form action="do_post.php" method="POST">
 <?php if (isset($id)) { echo '<input type="hidden" name="id" value="', $id, '">'; } ?>
      <label for="date">Date</label>
-     <input type=datetime-local" name="date" value="<?php echo $date ?>">
+     <input type="datetime-local" step="1" name="date" value="<?php echo date('Y-m-d\TH:i:s', $date) ?>">
      <br>
      <label for="title">Title</label>
      <input name="title" value="<?php echo $title ?>">

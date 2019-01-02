@@ -44,6 +44,13 @@
      </table>
     </article>
     <article>
+     <header>Blog Stylesheet</header>
+     <form action="do_style.php" method="post">
+      <textarea name="style"><?php readfile('../style.css') ?></textarea>
+      <button>Save</button>
+     </form>
+    </article>
+    <article>
      <header>Site Settings</header>
      <form action="do_settings.php" method="post">
       <table>
