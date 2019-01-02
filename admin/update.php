@@ -92,7 +92,7 @@ function create_post($db, $id)
     </article>
    </main>
   </div>
-  <footer>TinyBlog by Greg Kennedy</footer>
+  <footer><a href="https://github.com/greg-kennedy/TinyBlog">Powered by TinyBlog</a></footer>
  </body>
 </html>
 HTML;
@@ -158,7 +158,7 @@ function create_index($db)
     </article>
    </main>
   </div>
-  <footer>TinyBlog by Greg Kennedy</footer>
+  <footer><a href="https://github.com/greg-kennedy/TinyBlog">Powered by TinyBlog</a></footer>
  </body>
 </html>
 HTML;
@@ -208,7 +208,7 @@ HTML;
     $html .= <<<HTML
    </main>
   </div>
-  <footer>TinyBlog by Greg Kennedy</footer>
+  <footer><a href="https://github.com/greg-kennedy/TinyBlog">Powered by TinyBlog</a></footer>
  </body>
 </html>
 HTML;
@@ -305,7 +305,7 @@ HTML;
     </article>
    </main>
   </div>
-  <footer>TinyBlog by Greg Kennedy</footer>
+  <footer><a href="https://github.com/greg-kennedy/TinyBlog">Powered by TinyBlog</a></footer>
  </body>
 </html>
 HTML;
