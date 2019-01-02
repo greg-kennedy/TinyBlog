@@ -18,24 +18,23 @@
   // updates
   $changed_rows = 0;
   foreach (array('name') as $key) {
-    // check the db
+    // get value for key from POST
     $value = $_POST[$key] ?? '';
+
+    // special handler for password
+    if ($key == 'password') {
+      // don't replace password if nothing was entered
+      if ($value == '') {
+        continue;
+      }
+      $value = password_hash($password);
+    }
     $stmt->execute();
     $changed_rows += $db->changes();
   }
   $stmt->close();
 
-  // get list of all posts we need to go re-create
-/*
-  $result = $db->query('SELECT id FROM posts');
-  $num_rows = 0;
-
-  while ($row = $result->fetchArray(SQLITE3_NUM)) {
-    $ids[] = $row[0];
-  }
-  $result->finalize();
-*/
-
+  // If any settings changed, re-create everything.
   if ($changed_rows > 0)
   {
     // bake all posts

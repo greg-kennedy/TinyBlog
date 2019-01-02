@@ -48,19 +48,32 @@
      <form action="settings.php" method="post">
       <table>
        <tr><th>Key</th><th>Value</th></tr>
+       <tr><td><label for="password"><b>Admin Password</b></td><td><input type="password" name="password"></td></tr>
 <?php
   // Site Settings: read all key/value pairs from DB, and use to fill the table.
-  $descriptions = [
-    'name' => 'Blog Name',
-    'password' => 'Blog Password'
+  $settings = [
+    'name' => [ 'Blog Name', 'TinyBlog' ],
+    'index_size' => [ 'Index Posts', '5' ],
   ];
 
+  // saved settings in DB
   $result = $db->query('SELECT key, value FROM settings');
   while ($row = $result->fetchArray(SQLITE3_NUM)) {
-    echo '<tr><td><label for="', $row[0], '">', $descriptions[$row[0]], '</label></td><td>',
-      '<input type="text" name="', $row[0], '" value="', $row[1], "\"</td></tr>\n";
+    $saved_settings[$row[0]] = $row[1];
   }
   $result->finalize();
+
+  // fill the table with our settings, using the defaults where missing from db
+  foreach ($settings as $name => $info) {
+    if (array_key_exists($name, $saved_settings)) {
+      $value = $saved_settings[$name];
+    } else {
+      $value = $info[1];
+    }
+
+    echo '<tr><td><label for="', $name, '">', $info[0], '</label></td><td>',
+      '<input type="text" name="', $name, '" value="', $value, "\"</td></tr>\n";
+  }
 ?>
       </table>
       <button>Save</button>
