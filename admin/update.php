@@ -6,9 +6,18 @@
 /* Re-creates ALL posts */
 function create_all_posts($db)
 {
-  /* Retrieve settings */
+  /* Delete all existing posts */
+  $files = glob('../post/*.html'); // get all file names
+  foreach ($files as $file) { // iterate files
+    if (is_file($file)) {
+      unlink($file); // delete file
+    }
+  }
+
+  /* Retrieve list of posts from db */
   $result = $db->query('SELECT id FROM posts');
   while ($row = $result->fetchArray(SQLITE3_NUM)) {
+    // Call create_post for every post in the db
     create_post($db, $row[0]);
   }
   $result->finalize();
@@ -105,6 +114,7 @@ function create_index($db)
   $result->finalize();
 
   $blog_name = $settings['name'];
+  //$index_size = $settings['index_size'];
 
   /* get the five most recent blog posts */
   $stmt = $db->prepare('SELECT id, date, title, post FROM posts ORDER BY date desc LIMIT 5');
@@ -123,12 +133,38 @@ function create_index($db)
   $stmt->close();
 
   if (! $num_rows) {
-    // TODO: empty blog, replace with boilerplate
-    throw new Exception('Cannot create index.html: no posts in database');
-  }
-
-  // bake the post
-  $html = <<<HTML
+    // No posts in DB.  Create the initial "index" page again.
+    $html = <<<HTML
+<!DOCTYPE html>
+<html>
+ <head>
+  <meta charset="UTF-8">
+  <title>TinyBlog Default Index</title>
+  <link rel="stylesheet" type="text/css" href="style.css">
+ </head>
+ <body>
+  <header id="banner">
+   <h1>TinyBlog</h1>
+  </header>
+  <div id="wrap">
+   <main>
+    <article>
+     <header class="title">
+      <h2>TinyBlog has been successfully installed.</h2>
+     </header>
+     <section>
+      <p>You should proceed to the <b><a href="admin">admin area</a></b> to set up your blog.</p>
+     </section>
+    </article>
+   </main>
+  </div>
+  <footer>TinyBlog by Greg Kennedy</footer>
+ </body>
+</html>
+HTML;
+  } else {
+    // bake the post
+    $html = <<<HTML
 <!DOCTYPE html>
 <html>
  <head>
@@ -155,8 +191,8 @@ function create_index($db)
    <main>
 HTML;
 
-  for ($i = 0; $i < $num_rows; $i ++) {
-    $html .= <<<HTML
+    for ($i = 0; $i < $num_rows; $i ++) {
+      $html .= <<<HTML
     <article>
      <header class="title">
       <h2><a href="post/$id[$i].html">$title[$i]</a></h2>
@@ -167,15 +203,16 @@ HTML;
      </section>
     </article>
 HTML;
-  }
+    }
 
-  $html .= <<<HTML
+    $html .= <<<HTML
    </main>
   </div>
   <footer>TinyBlog by Greg Kennedy</footer>
  </body>
 </html>
 HTML;
+  }
 
   // write to disk
   $file = fopen('../index.html', 'w');
