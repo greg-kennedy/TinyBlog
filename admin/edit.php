@@ -53,7 +53,7 @@
     <header>
      <h2>Post Management</h2>
     </header>
-    <form action="post.php" method="POST">
+    <form action="do_post.php" method="POST">
 <?php if (isset($id)) { echo '<input type="hidden" name="id" value="', $id, '">'; } ?>
      <label for="date">Date</label>
      <input type=datetime-local" name="date" value="<?php echo $date ?>">

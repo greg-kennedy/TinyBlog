@@ -45,7 +45,7 @@
     </article>
     <article>
      <header>Site Settings</header>
-     <form action="settings.php" method="post">
+     <form action="do_settings.php" method="post">
       <table>
        <tr><th>Key</th><th>Value</th></tr>
        <tr><td><label for="password"><b>Admin Password</b></td><td><input type="password" name="password"></td></tr>
