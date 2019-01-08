@@ -3,12 +3,53 @@
 /* TinyBlog Update Script
     Re-renders all HTML documents in the parent folder. */
 
+/* big ol' list of replacements */
+const FROM_BBCODE = array(
+  '/\[code\](.+?)\[\/code\]/is',  // CODE
+  '/\n{2,}/', '/\n/',             // NEWLINE
+  '/\[b\]/i', '/\[\/b\]/i',       // BOLD
+  '/\[i\]/i', '/\[\/i\]/i',       // ITALIC
+  '/\[u\]/i', '/\[\/u\]/i',       // UNDERLINE
+  '/\[s\]/i', '/\[\/s\]/i',       // STRIKETHROUGH
+  '/\[url\](.+?)\[\/url\]/i',     // URL
+  '/\[url=([^\]]+)\](.+?)\[\/url\]/i',     // URL
+  '/\[img\](.+?)\[\/img\]/i',     // IMG
+  '/\[quote\](.+?)\[\/quote\]/i',     // QUOTE
+// '/\[quote=([^\]]+)\](.+?)\[\/quote\]/i',     // QUOTE
+  '/\[size=([^\]]+)\](.+?)\[\/size\]/i',     // SIZE
+  '/\[color=([^\]]+)\](.+?)\[\/color\]/i',     // COLOR
+  '/\[list\]/i', '/\[\/list\]/i', // LIST
+  '/\[\*\](.+)$/',                // LIST ITEM
+  '/\[table\]/i', '/\[\/table\]/i', // TABLE
+  '/\[tr\]/i', '/\[\/tr\]/i', // TABLE ROW
+  '/\[td\]/i', '/\[\/td\]/i', // TABLE CELL
+);
+const TO_HTML     = array(
+  '<pre>$1</pre>',                // CODE
+  '<p>',      '<br>',             // NEWLINE
+  '<b>',      '</b>',             // BOLD
+  '<i>',      '</i>',             // ITALIC
+  '<ins>',    '</ins>',           // UNDERLINE
+  '<del>',    '</del>',           // UNDERLINE
+  '<a href="$1">$1</a>',          // URL
+  '<a href="$1">$2</a>',          // URL
+  '<img src="$1">',               // IMG
+  '<blockquote>$1</blockquote>',  // QUOTE
+// '<blockquote>$2</blockquote>',  // QUOTE
+  '<span style="font-size:$1">$2</span>',     // SIZE
+  '<span style="font-color:$1">$2</span>',     // COLOR
+  '<ul>',     '</ul>',            // LIST
+  '<li>$1</li>',                  // LIST ITEM
+  '<table>',  '</table>',         // TABLE
+  '<tr>',     '</tr>',            // TABLE ROW
+  '<td>',     '</td>',            // TABLE CELL
+);
+
 /* Renders a post to HTML, for inclusion into a document. */
 function render_post($post)
 {
-  /* Newline fix */
-  $post = preg_replace('/\n\n/', '<p>', $post);
-  $post = preg_replace('/\n/', '<br>', $post);
+  /* BBCode replacements */
+  $post = preg_replace(FROM_BBCODE, TO_HTML, $post);
 
   return $post;
 }
