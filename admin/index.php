@@ -31,13 +31,13 @@
     <article>
      <header>Post Management</header>
      <table>
-      <tr><th>Date</th><th>Title</th><th>Action</th></tr>
-      <tr><td>&nbsp;</td><td><i>New Post</i></td><td><a href="edit.php">Edit</a></td></tr>
+      <tr><th>Date</th><th>Title</th><th colspan="2">Action</th></tr>
+      <tr><td>&nbsp;</td><td><i>New Post</i></td><td colspan="2"><a href="edit.php">Create</a></td></tr>
 <?php
   // Fill the Posts table with all posts in the db, newest first
   $result = $db->query('SELECT id, date, title FROM posts ORDER BY date DESC');
   while ($row = $result->fetchArray(SQLITE3_NUM)) {
-    echo '<tr><td>', date(DATE_RFC2822, $row[1]), '</td><td>', $row[2], '</td><td><a href="edit.php?id=', $row[0], '">Edit</a></td></tr>';
+    echo '<tr><td>', date(DATE_RFC2822, $row[1]), '</td><td>', $row[2], '</td><td><a href="edit.php?id=', $row[0], '">Edit</a></td><td><a href="do_delete.php?id=', $row[0], '">Delete</a></td></tr>';
   }
   $result->finalize();
 ?>

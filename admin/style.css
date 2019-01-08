@@ -22,6 +22,10 @@ body>header>h1 {
   color: white;
 }
 
+textarea {
+  width: 100%;
+}
+
 div#wrap {
   display: flex;
   flex-direction: row;

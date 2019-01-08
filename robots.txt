@@ -1,0 +1,6 @@
+User-agent: *
+Disallow: /admin/
+Disallow: /.git/
+Disallow: /.gitignore
+Disallow: /LICENSE
+Disallow: /README

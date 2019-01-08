@@ -3,6 +3,16 @@
 /* TinyBlog Update Script
     Re-renders all HTML documents in the parent folder. */
 
+/* Renders a post to HTML, for inclusion into a document. */
+function render_post($post)
+{
+  /* Newline fix */
+  $post = preg_replace('/\n\n/', '<p>', $post);
+  $post = preg_replace('/\n/', '<br>', $post);
+
+  return $post;
+}
+
 /* Re-creates ALL posts */
 function create_all_posts($db)
 {
@@ -87,7 +97,9 @@ function create_post($db, $id)
       <p>$date</p>
      </header>
      <section>
-      <p>$post</p>
+HTML;
+  $html .= render_post($post);
+  $html .= <<<HTML
      </section>
     </article>
    </main>
@@ -169,7 +181,7 @@ HTML;
 <html>
  <head>
   <meta charset="UTF-8">
-  <title>$title - $blog_name</title>
+  <title>$blog_name</title>
   <link rel="stylesheet" type="text/css" href="style.css">
  </head>
  <body>
@@ -199,7 +211,9 @@ HTML;
       <p>$date[$i]</p>
      </header>
      <section>
-      <p>$post[$i]</p>
+HTML;
+  $html .= render_post($post[$i]);
+  $html .= <<<HTML
      </section>
     </article>
 HTML;
