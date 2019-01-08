@@ -126,6 +126,7 @@ function create_post($db, $id)
       <h2>Other</h2>
      </header>
      <ul>
+      <li><a href="../index.html">Blog Index</a></li>
       <li><a href="../archive.html">Blog Archive</a></li>
       <li><a href="../admin">Admin Area</a></li>
      </ul>
@@ -328,7 +329,7 @@ function create_archive($db)
       <h2>Other</h2>
      </header>
      <ul>
-      <li><a href="archive.html">Blog Archive</a></li>
+      <li><a href="index.html">Blog Index</a></li>
       <li><a href="admin">Admin Area</a></li>
      </ul>
     </nav>
