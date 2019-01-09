@@ -55,6 +55,8 @@
     create_index($db);
     // update the archive page
     create_archive($db);
+    // ...and the atom feed
+    create_atom($db);
 
     // close the db handle, all done
     $db->close();

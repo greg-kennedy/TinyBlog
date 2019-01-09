@@ -94,7 +94,7 @@ function create_post($db, $id)
 
   $num_rows = 0;
   while ($row = $result->fetchArray(SQLITE3_NUM)) {
-    $date = date(DATE_RFC2822, $row[0]);
+    $date = date(DATE_ATOM, $row[0]);
     $title = $row[1];
     $post = $row[2];
     $num_rows ++;
@@ -178,7 +178,7 @@ function create_index($db)
   $num_rows = 0;
   while ($row = $result->fetchArray(SQLITE3_NUM)) {
     $id[] = $row[0];
-    $date[] = date(DATE_RFC2822, $row[1]);
+    $date[] = date(DATE_ATOM, $row[1]);
     $title[] = $row[2];
     $post[] = $row[3];
     $num_rows ++;
@@ -295,7 +295,7 @@ function create_archive($db)
   $num_rows = 0;
   while ($row = $result->fetchArray(SQLITE3_NUM)) {
     $id[] = $row[0];
-    $date[] = date(DATE_RFC2822, $row[1]);
+    $date[] = date(DATE_ATOM, $row[1]);
     $title[] = $row[2];
     $num_rows ++;
   }
@@ -369,5 +369,70 @@ HTML;
   // write to disk
   $file = fopen('../archive.html', 'w');
   fwrite($file, $html);
+  fclose($file);
+}
+
+/* Updates the Atom feed with the latest posts */
+function create_atom($db)
+{
+  /* Retrieve settings */
+  $result = $db->query('SELECT key, value FROM settings');
+  while ($row = $result->fetchArray(SQLITE3_NUM)) {
+    $settings[$row[0]] = $row[1];
+  }
+  $result->finalize();
+
+  $blog_name = $settings['name'];
+  //$index_size = $settings['index_size'];
+
+  /* get the five most recent blog posts */
+  $stmt = $db->prepare('SELECT id, date, title, post FROM posts ORDER BY date desc LIMIT 5');
+
+  $result = $stmt->execute();
+
+  $num_rows = 0;
+  while ($row = $result->fetchArray(SQLITE3_NUM)) {
+    $id[] = $row[0];
+    $date[] = date(DATE_ATOM, $row[1]);
+    $title[] = $row[2];
+    $post[] = $row[3];
+    $num_rows ++;
+  }
+  $result->finalize();
+  $stmt->close();
+
+  if ($num_rows == 0) {
+    $feed_date = '1970-01-01T00:00:00Z';
+  } else {
+    $feed_date = $date[0];
+  }
+
+  $xml = <<<XML
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+	<title>$blog_name</title>
+	<author><name>$blog_name</name></author>
+	<id>$blog_name</id>
+	<updated>$feed_date</updated>
+XML;
+
+  for ($i = 0; $i < $num_rows; $i ++) {
+    $xml .= <<<XML
+       <entry>
+		<title>$title[$i]</title>
+		<id>tag:$blog_name,$date[$i]:$i</id>
+		<updated>$date[$i]</updated>
+		<content>blog/post/$id[$i].html</content>
+       </entry>
+XML;
+  }
+
+  $xml .= <<<XML
+</feed>
+XML;
+
+  // write to disk
+  $file = fopen('../atom.xml', 'w');
+  fwrite($file, $xml);
   fclose($file);
 }

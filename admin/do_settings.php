@@ -43,6 +43,8 @@
     create_index($db);
     // update the archive page
     create_archive($db);
+    // ...and the atom feed
+    create_atom($db);
   }
 
   // all done with the db
