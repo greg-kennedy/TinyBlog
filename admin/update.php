@@ -2,6 +2,7 @@
 
 /* TinyBlog Update Script
     Re-renders all HTML documents in the parent folder. */
+require_once('inc.settings.php');
 
 /* big ol' list of replacements */
 const FROM_BBCODE = array(
@@ -45,6 +46,17 @@ const TO_HTML     = array(
   '<td>',     '</td>',            // TABLE CELL
 );
 
+/* file_put_contents but with error checking */
+function safe_file_put_contents($filename, $content)
+{
+  $bytes_written = file_put_contents($filename, $content);
+  if ($bytes_written === FALSE) {
+    $error = error_get_last();
+    throw new ErrorException($error['message'], 0, $error['type'], $error['file'], $error['line']);
+  }
+  return $bytes_written;
+}
+
 /* Renders a post to HTML, for inclusion into a document. */
 function render_post($post)
 {
@@ -78,13 +90,9 @@ function create_all_posts($db)
 function create_post($db, $id)
 {
   /* Retrieve settings */
-  $result = $db->query('SELECT key, value FROM settings');
-  while ($row = $result->fetchArray(SQLITE3_NUM)) {
-    $settings[$row[0]] = $row[1];
-  }
-  $result->finalize();
+  $settings = settings_load($db);
 
-  $blog_name = $settings['name'];
+  $blog_name = $settings['blog_name'];
 
   /* get the blog post */
   $stmt = $db->prepare('SELECT date, title, post FROM posts WHERE id=:id');
@@ -152,23 +160,17 @@ HTML;
 HTML;
 
   // write to disk
-  $file = fopen('../post/' . $id . '.html', 'w');
-  fwrite($file, $html);
-  fclose($file);
+  safe_file_put_contents('../post/' . $id . '.html', $html);
 }
 
 /* Bakes a new Index page. */
 function create_index($db)
 {
   /* Retrieve settings */
-  $result = $db->query('SELECT key, value FROM settings');
-  while ($row = $result->fetchArray(SQLITE3_NUM)) {
-    $settings[$row[0]] = $row[1];
-  }
-  $result->finalize();
+  $settings = settings_load($db);
 
-  $blog_name = $settings['name'];
-  //$index_size = $settings['index_size'];
+  $blog_name = $settings['blog_name'];
+  $index_size = $settings['index_size'];
 
   /* get the five most recent blog posts */
   $stmt = $db->prepare('SELECT id, date, title, post FROM posts ORDER BY date desc LIMIT 5');
@@ -271,21 +273,15 @@ HTML;
   }
 
   // write to disk
-  $file = fopen('../index.html', 'w');
-  fwrite($file, $html);
-  fclose($file);
+  safe_file_put_contents('../index.html', $html);
 }
 
 function create_archive($db)
 {
   /* Retrieve settings */
-  $result = $db->query('SELECT key, value FROM settings');
-  while ($row = $result->fetchArray(SQLITE3_NUM)) {
-    $settings[$row[0]] = $row[1];
-  }
-  $result->finalize();
+  $settings = settings_load($db);
 
-  $blog_name = $settings['name'];
+  $blog_name = $settings['blog_name'];
 
   /* get all the blog posts */
   $stmt = $db->prepare('SELECT id, date, title FROM posts ORDER BY date desc');
@@ -301,13 +297,6 @@ function create_archive($db)
   }
   $result->finalize();
   $stmt->close();
-
-/*
-  if (! $num_rows) {
-    // TODO: empty blog, replace with boilerplate
-    throw new Exception("id '$id' did not match any posts in database");
-  }
-*/
 
   // bake the post
   $html = <<<HTML
@@ -367,22 +356,18 @@ HTML;
 HTML;
 
   // write to disk
-  $file = fopen('../archive.html', 'w');
-  fwrite($file, $html);
-  fclose($file);
+  safe_file_put_contents('../archive.html', $html);
 }
 
 /* Updates the Atom feed with the latest posts */
 function create_atom($db)
 {
   /* Retrieve settings */
-  $result = $db->query('SELECT key, value FROM settings');
-  while ($row = $result->fetchArray(SQLITE3_NUM)) {
-    $settings[$row[0]] = $row[1];
-  }
-  $result->finalize();
+  $settings = settings_load($db);
 
-  $blog_name = $settings['name'];
+  $blog_name = $settings['blog_name'];
+  $blog_author = $settings['blog_author'];
+  $blog_url = $settings['blog_url'];
   //$index_size = $settings['index_size'];
 
   /* get the five most recent blog posts */
@@ -411,7 +396,9 @@ function create_atom($db)
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 	<title>$blog_name</title>
-	<author><name>$blog_name</name></author>
+	<author>
+		<name>$blog_author</name>
+	</author>
 	<id>$blog_name</id>
 	<updated>$feed_date</updated>
 XML;
@@ -422,7 +409,7 @@ XML;
 		<title>$title[$i]</title>
 		<id>tag:$blog_name,$date[$i]:$i</id>
 		<updated>$date[$i]</updated>
-		<content>blog/post/$id[$i].html</content>
+		<content>$blog_url/post/$id[$i].html</content>
        </entry>
 XML;
   }
@@ -432,7 +419,5 @@ XML;
 XML;
 
   // write to disk
-  $file = fopen('../atom.xml', 'w');
-  fwrite($file, $xml);
-  fclose($file);
+  safe_file_put_contents('../atom.xml', $xml);
 }

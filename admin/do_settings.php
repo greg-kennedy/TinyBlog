@@ -2,6 +2,9 @@
   // user must be logged in...
   require_once('auth.php');
 
+  // SETTINGS structure
+  require_once('inc.settings.php');
+
   // functions to update HTML files
   require_once('update.php');
 
@@ -10,19 +13,35 @@
   $db = new SQLite3('tinyblog.db', SQLITE3_OPEN_READWRITE);
   $db->enableExceptions(TRUE);
 
+  // Delete any old settings
+  //  This is kind of a hack: we construct a WHERE clause by concatenating '?' parameters together
+  $query = 'DELETE FROM settings WHERE key NOT IN (' . implode(',', array_fill(0, count(SETTINGS), '?')) . ')';
+  $stmt = $db->prepare($query);
+  // Bind each SETTING name to the prepared statement
+  for ($i = 0; $i < count(SETTINGS); $i ++)
+  {
+    $stmt->bindValue($i + 1, SETTINGS[$i][0], SQLITE3_TEXT);
+  }
+  $stmt->bindParam(':value', $value);
+  $stmt->execute();
+  $stmt->close();
+
   // Retrieve each setting from the DB.
   $stmt = $db->prepare('REPLACE INTO settings(key, value) VALUES (:key, :value)');
   $stmt->bindParam(':key', $key);
   $stmt->bindParam(':value', $value);
 
   // updates
+  // Changed rows counter to determine if any changes happened
   $changed_rows = 0;
-  foreach (array('name') as $key) {
-    // get value for key from POST
+  foreach (SETTINGS as $setting) {
+    $key = $setting[0];
+
+    $type = $setting[2];
+
     $value = $_POST[$key] ?? '';
 
-    // special handler for password
-    if ($key == 'password') {
+    if ($type == TYPE_PASSWORD) {
       // don't replace password if nothing was entered
       if ($value == '') {
         continue;

@@ -1,5 +1,7 @@
 <?php
   require_once('auth.php');
+
+  require_once('inc.settings.php');
 ?>
 <!DOCTYPE html>
 <html>
@@ -10,11 +12,6 @@
  </head>
  <body>
   <header id="banner"><h1>TinyBlog Admin Menu</h1></header>
-<?php
-  // Open the sqlite3 database
-  $db = new SQLite3('tinyblog.db', SQLITE3_OPEN_READONLY);
-  $db->enableExceptions(TRUE);
-?>
   <div id="wrap">
    <aside>
     <nav>
@@ -34,6 +31,10 @@
       <tr><th>Date</th><th>Title</th><th colspan="2">Action</th></tr>
       <tr><td>&nbsp;</td><td><i>New Post</i></td><td colspan="2"><a href="edit.php">Create</a></td></tr>
 <?php
+  // Open the sqlite3 database
+  $db = new SQLite3('tinyblog.db', SQLITE3_OPEN_READONLY);
+  $db->enableExceptions(TRUE);
+
   // Fill the Posts table with all posts in the db, newest first
   $result = $db->query('SELECT id, date, title FROM posts ORDER BY date DESC');
   while ($row = $result->fetchArray(SQLITE3_NUM)) {
@@ -55,32 +56,28 @@
      <form action="do_settings.php" method="post">
       <table>
        <tr><th>Key</th><th>Value</th></tr>
-       <tr><td><label for="password"><b>Admin Password</b></td><td><input type="password" name="password"></td></tr>
 <?php
   // Site Settings: read all key/value pairs from DB, and use to fill the table.
-  $settings = [
-    'name' => [ 'Blog Name', 'TinyBlog' ],
-    'index_size' => [ 'Index Posts', '5' ],
-  ];
+  $settings = settings_load($db);
 
-  // saved settings in DB
-  $result = $db->query('SELECT key, value FROM settings');
-  while ($row = $result->fetchArray(SQLITE3_NUM)) {
-    $saved_settings[$row[0]] = $row[1];
-  }
-  $result->finalize();
+  // create table, using SETTINGS constant for order and other info
+  foreach (SETTINGS as $setting) {
+    $name = $setting[0];
+    $description = $setting[1];
+    $type = $setting[2];
 
-  // fill the table with our settings, using the defaults where missing from db
-  foreach ($settings as $name => $info) {
-    if (array_key_exists($name, $saved_settings)) {
-      $value = $saved_settings[$name];
+    if ($type == TYPE_PASSWORD) {
+      echo '<tr><td><label for="', $name, '"><b>', $description, '</b></label></td><td>',
+        '<input type="password" name="', $name, "\"></td></tr>\n";
     } else {
-      $value = $info[1];
+      $value = $settings[$name];
+      echo '<tr><td><label for="', $name, '">', $description, '</label></td><td>',
+        '<input type="text" name="', $name, '" value="', $value, "\"</td></tr>\n";
     }
-
-    echo '<tr><td><label for="', $name, '">', $info[0], '</label></td><td>',
-      '<input type="text" name="', $name, '" value="', $value, "\"</td></tr>\n";
   }
+
+  // all done with the db, close it.
+  $db->close();
 ?>
       </table>
       <button>Save</button>
@@ -88,10 +85,6 @@
     </article>
    </main>
   </div>
-<?php
-  // all done with the db, close it.
-  $db->close();
-?>
   <footer><a href="https://github.com/greg-kennedy/TinyBlog">Powered by TinyBlog</a></footer>
  </body>
 </html>
