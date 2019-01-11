@@ -239,6 +239,7 @@ HTML;
       <h2>Other</h2>
      </header>
      <ul>
+      <li>Blog Index</li>
       <li><a href="archive.html">Blog Archive</a></li>
       <li><a href="admin">Admin Area</a></li>
      </ul>
@@ -319,6 +320,7 @@ function create_archive($db)
      </header>
      <ul>
       <li><a href="index.html">Blog Index</a></li>
+      <li>Blog Archive</li>
       <li><a href="admin">Admin Area</a></li>
      </ul>
     </nav>
@@ -400,6 +402,7 @@ function create_atom($db)
 		<name>$blog_author</name>
 	</author>
 	<id>$blog_name</id>
+	<link rel="self" href="$blog_url/atom.xml" />
 	<updated>$feed_date</updated>
 XML;
 
@@ -407,7 +410,7 @@ XML;
     $xml .= <<<XML
        <entry>
 		<title>$title[$i]</title>
-		<id>tag:$blog_name,$date[$i]:$i</id>
+		<id>tag:$blog_url,$date[$i]:$i</id>
 		<updated>$date[$i]</updated>
 		<content>$blog_url/post/$id[$i].html</content>
        </entry>

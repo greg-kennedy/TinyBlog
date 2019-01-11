@@ -8,11 +8,7 @@ if ( isset( $_POST['password'] ) ) {
   $db->enableExceptions(TRUE);
   
   // Retrieve password from database
-  $result = $db->query('SELECT value FROM settings WHERE key="password"');
-  while ($row = $result->fetchArray(SQLITE3_NUM)) {
-    $db_password = $row[0];
-  }
-  $result->finalize();
+  $db_password = $db->querySingle('SELECT value FROM settings WHERE key="password"');
   $db->close();
 
   // Verify user password and set $_SESSION
