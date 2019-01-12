@@ -1,4 +1,7 @@
 <?php
+
+require_once 'set_error_handler.php';
+
   session_start();
 
   // Destroying the session clears the $_SESSION variable, thus "logging" the user

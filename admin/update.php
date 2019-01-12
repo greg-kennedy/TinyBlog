@@ -2,7 +2,8 @@
 
 /* TinyBlog Update Script
     Re-renders all HTML documents in the parent folder. */
-require_once('inc.settings.php');
+require_once 'set_error_handler.php';
+require_once 'inc.settings.php';
 
 /* big ol' list of replacements */
 const FROM_BBCODE = array(
@@ -45,17 +46,6 @@ const TO_HTML     = array(
   '<tr>',     '</tr>',            // TABLE ROW
   '<td>',     '</td>',            // TABLE CELL
 );
-
-/* file_put_contents but with error checking */
-function safe_file_put_contents($filename, $content)
-{
-  $bytes_written = file_put_contents($filename, $content);
-  if ($bytes_written === FALSE) {
-    $error = error_get_last();
-    throw new ErrorException($error['message'], 0, $error['type'], $error['file'], $error['line']);
-  }
-  return $bytes_written;
-}
 
 /* Renders a post to HTML, for inclusion into a document. */
 function render_post($post)
@@ -160,7 +150,7 @@ HTML;
 HTML;
 
   // write to disk
-  safe_file_put_contents('../post/' . $id . '.html', $html);
+  file_put_contents('../post/' . $id . '.html', $html);
 }
 
 /* Bakes a new Index page. */
@@ -274,7 +264,7 @@ HTML;
   }
 
   // write to disk
-  safe_file_put_contents('../index.html', $html);
+  file_put_contents('../index.html', $html);
 }
 
 function create_archive($db)
@@ -358,7 +348,7 @@ HTML;
 HTML;
 
   // write to disk
-  safe_file_put_contents('../archive.html', $html);
+  file_put_contents('../archive.html', $html);
 }
 
 /* Updates the Atom feed with the latest posts */
@@ -422,5 +412,5 @@ XML;
 XML;
 
   // write to disk
-  safe_file_put_contents('../atom.xml', $xml);
+  file_put_contents('../atom.xml', $xml);
 }

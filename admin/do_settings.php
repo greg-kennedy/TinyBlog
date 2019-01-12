@@ -1,12 +1,12 @@
 <?php
   // user must be logged in...
-  require_once('auth.php');
+  require_once 'auth.php';
 
   // SETTINGS structure
-  require_once('inc.settings.php');
+  require_once 'inc.settings.php';
 
   // functions to update HTML files
-  require_once('update.php');
+  require_once 'update.php';
 
   /* New settings */
   //  Open the sqlite3 database
@@ -46,7 +46,7 @@
       if ($value == '') {
         continue;
       }
-      $value = password_hash($password);
+      $value = password_hash($value, PASSWORD_DEFAULT);
     }
     $stmt->execute();
     $changed_rows += $db->changes();
@@ -71,5 +71,5 @@
 
   // redirect to settings again
   header('Location: index.php');
-  exit();
+  exit;
 ?>

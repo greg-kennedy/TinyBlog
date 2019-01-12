@@ -1,12 +1,14 @@
 <?php
 
+require_once 'set_error_handler.php';
+
 // On re-entry to this page
 if ( isset( $_POST['password'] ) ) {
   // Getting submitted user data from database
   //  Open the sqlite3 database
   $db = new SQLite3('tinyblog.db', SQLITE3_OPEN_READONLY);
   $db->enableExceptions(TRUE);
-  
+
   // Retrieve password from database
   $db_password = $db->querySingle('SELECT value FROM settings WHERE key="password"');
   $db->close();

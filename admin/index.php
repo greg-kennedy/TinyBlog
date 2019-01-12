@@ -1,7 +1,7 @@
 <?php
-  require_once('auth.php');
+  require_once 'auth.php';
 
-  require_once('inc.settings.php');
+  require_once 'inc.settings.php';
 ?>
 <!DOCTYPE html>
 <html>
@@ -38,7 +38,7 @@
   // Fill the Posts table with all posts in the db, newest first
   $result = $db->query('SELECT id, date, title FROM posts ORDER BY date DESC');
   while ($row = $result->fetchArray(SQLITE3_NUM)) {
-    echo '<tr><td>', date(DATE_RFC2822, $row[1]), '</td><td>', $row[2], '</td><td><a href="edit.php?id=', $row[0], '">Edit</a></td><td><a href="do_delete.php?id=', $row[0], '">Delete</a></td></tr>';
+    echo '<tr><td>', date(DATE_ATOM, $row[1]), '</td><td>', $row[2], '</td><td><a href="edit.php?id=', $row[0], '">Edit</a></td><td><a href="do_delete.php?id=', $row[0], '">Delete</a></td></tr>';
   }
   $result->finalize();
 ?>

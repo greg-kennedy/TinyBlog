@@ -1,9 +1,9 @@
 <?php
   // user must be logged in...
-  require_once('auth.php');
+  require_once 'auth.php';
 
   // functions to update HTML files
-  require_once('update.php');
+  require_once 'update.php';
 
   /* Commits a new post to the db */
   // get post values
@@ -63,7 +63,7 @@
 
     // redirect to post
     header('Location: ../post/' . $id . '.html');
-    exit();
+    exit;
   } else {
     // Something went wrong.
     $db->close();

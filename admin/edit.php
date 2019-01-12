@@ -1,5 +1,5 @@
 <?php
-  require_once('auth.php');
+  require_once 'auth.php';
 ?>
 <!DOCTYPE html>
 <html>
@@ -39,7 +39,7 @@
     $db->close();
 
     if (! $num_rows) {
-      throw new Exception("id '$id' did not match any posts in database");
+      throw new RuntimeException("id '$id' did not match any posts in database");
     }
   } else {
     // new post
