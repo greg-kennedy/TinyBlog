@@ -1,4 +1,5 @@
 <?php
+
   // user must be logged in...
   require_once 'auth.php';
 
@@ -14,11 +15,8 @@
   // convert date to timestamp
   $date = DateTime::createFromFormat('Y-m-d\TH:i:s', $date)->getTimestamp();
 
-  // make post and title HTML safe before sticking into the db
-  $title = htmlspecialchars($title, ENT_NOQUOTES | ENT_HTML5);
-  $post = htmlspecialchars($post, ENT_NOQUOTES | ENT_HTML5);
   // standardize post to LF-only line endings
-  $post = preg_replace('/\r/', '', $post);
+  $post = str_replace("\r", '', $post);
 
   //  Open the sqlite3 database
   $db = new SQLite3('tinyblog.db', SQLITE3_OPEN_READWRITE);

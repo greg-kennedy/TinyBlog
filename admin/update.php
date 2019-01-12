@@ -49,7 +49,10 @@ const TO_HTML     = array(
 
 /* Renders a post to HTML, for inclusion into a document. */
 function render_post($post)
-{
+
+  /* HTML special characters */
+  $post = htmlspecialchars($post, ENT_HTML5);
+
   /* BBCode replacements */
   $post = preg_replace(FROM_BBCODE, TO_HTML, $post);
 

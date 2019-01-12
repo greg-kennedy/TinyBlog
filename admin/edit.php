@@ -59,11 +59,11 @@
      <input type="datetime-local" step="1" name="date" value="<?php echo date('Y-m-d\TH:i:s', $date) ?>">
      <br>
      <label for="title">Title</label>
-     <input name="title" value="<?php echo $title ?>">
+     <input name="title" value="<?php echo htmlspecialchars($title, ENT_HTML5) ?>">
      <br>
      <label for="post">Post</label>
      <br>
-     <textarea name="post"><?php echo $post ?></textarea>
+     <textarea name="post"><?php echo htmlspecialchars($post, ENT_HTML5) ?></textarea>
      <button>Save</button>
      <a href="index.php">Cancel</a>
     </form>

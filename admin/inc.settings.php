@@ -51,3 +51,4 @@ function settings_load($db)
   return $settings;
 }
 
+?>

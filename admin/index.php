@@ -47,7 +47,7 @@
     <article>
      <header>Blog Stylesheet</header>
      <form action="do_style.php" method="post">
-      <textarea name="style"><?php readfile('../style.css') ?></textarea>
+      <textarea name="style"><?php echo htmlspecialchars(file_get_contents('../style.css'), ENT_HTML5); ?></textarea>
       <button>Save</button>
      </form>
     </article>
