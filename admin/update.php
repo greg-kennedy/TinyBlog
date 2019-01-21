@@ -5,59 +5,7 @@
 require_once 'set_error_handler.php';
 require_once 'inc.settings.php';
 
-/* big ol' list of replacements */
-const FROM_BBCODE = array(
-  '/\[code\](.+?)\[\/code\]/is',  // CODE
-  '/\n{2,}/', '/\n/',             // NEWLINE
-  '/\[b\]/i', '/\[\/b\]/i',       // BOLD
-  '/\[i\]/i', '/\[\/i\]/i',       // ITALIC
-  '/\[u\]/i', '/\[\/u\]/i',       // UNDERLINE
-  '/\[s\]/i', '/\[\/s\]/i',       // STRIKETHROUGH
-  '/\[url\](.+?)\[\/url\]/i',     // URL
-  '/\[url=([^\]]+)\](.+?)\[\/url\]/i',     // URL
-  '/\[img\](.+?)\[\/img\]/i',     // IMG
-  '/\[quote\](.+?)\[\/quote\]/i',     // QUOTE
-// '/\[quote=([^\]]+)\](.+?)\[\/quote\]/i',     // QUOTE
-  '/\[size=([^\]]+)\](.+?)\[\/size\]/i',     // SIZE
-  '/\[color=([^\]]+)\](.+?)\[\/color\]/i',     // COLOR
-  '/\[list\]/i', '/\[\/list\]/i', // LIST
-  '/\[\*\](.+)$/',                // LIST ITEM
-  '/\[table\]/i', '/\[\/table\]/i', // TABLE
-  '/\[tr\]/i', '/\[\/tr\]/i', // TABLE ROW
-  '/\[td\]/i', '/\[\/td\]/i', // TABLE CELL
-);
-const TO_HTML     = array(
-  '<pre>$1</pre>',                // CODE
-  '<p>',      '<br>',             // NEWLINE
-  '<b>',      '</b>',             // BOLD
-  '<i>',      '</i>',             // ITALIC
-  '<ins>',    '</ins>',           // UNDERLINE
-  '<del>',    '</del>',           // UNDERLINE
-  '<a href="$1">$1</a>',          // URL
-  '<a href="$1">$2</a>',          // URL
-  '<img src="$1">',               // IMG
-  '<blockquote>$1</blockquote>',  // QUOTE
-// '<blockquote>$2</blockquote>',  // QUOTE
-  '<span style="font-size:$1">$2</span>',     // SIZE
-  '<span style="font-color:$1">$2</span>',     // COLOR
-  '<ul>',     '</ul>',            // LIST
-  '<li>$1</li>',                  // LIST ITEM
-  '<table>',  '</table>',         // TABLE
-  '<tr>',     '</tr>',            // TABLE ROW
-  '<td>',     '</td>',            // TABLE CELL
-);
-
-/* Renders a post to HTML, for inclusion into a document. */
-function render_post($post)
-
-  /* HTML special characters */
-  $post = htmlspecialchars($post, ENT_HTML5);
-
-  /* BBCode replacements */
-  $post = preg_replace(FROM_BBCODE, TO_HTML, $post);
-
-  return $post;
-}
+require_once 'bbcode.php';
 
 /* Re-creates ALL posts */
 function create_all_posts($db)
@@ -114,6 +62,7 @@ function create_post($db, $id)
  <head>
   <meta charset="UTF-8">
   <title>$title - $blog_name</title>
+  <link rel="alternate" type="application/atom+xml" title="Atom Feed" href="../atom.xml">
   <link rel="stylesheet" type="text/css" href="../style.css">
  </head>
  <body>
@@ -129,6 +78,7 @@ function create_post($db, $id)
      <ul>
       <li><a href="../index.html">Blog Index</a></li>
       <li><a href="../archive.html">Blog Archive</a></li>
+      <li><a href="../atom.xml">Atom Feed</a></li>
       <li><a href="../admin">Admin Area</a></li>
      </ul>
     </nav>
@@ -141,7 +91,7 @@ function create_post($db, $id)
      </header>
      <section>
 HTML;
-  $html .= render_post($post);
+  $html .= bbcode_to_html($post);
   $html .= <<<HTML
      </section>
     </article>
@@ -189,6 +139,7 @@ function create_index($db)
  <head>
   <meta charset="UTF-8">
   <title>TinyBlog Default Index</title>
+  <link rel="alternate" type="application/atom+xml" title="Atom Feed" href="atom.xml">
   <link rel="stylesheet" type="text/css" href="style.css">
  </head>
  <body>
@@ -219,6 +170,7 @@ HTML;
  <head>
   <meta charset="UTF-8">
   <title>$blog_name</title>
+  <link rel="alternate" type="application/atom+xml" title="Atom Feed" href="atom.xml">
   <link rel="stylesheet" type="text/css" href="style.css">
  </head>
  <body>
@@ -234,6 +186,7 @@ HTML;
      <ul>
       <li>Blog Index</li>
       <li><a href="archive.html">Blog Archive</a></li>
+      <li><a href="atom.xml">Atom Feed</a></li>
       <li><a href="admin">Admin Area</a></li>
      </ul>
     </nav>
@@ -250,7 +203,7 @@ HTML;
      </header>
      <section>
 HTML;
-  $html .= render_post($post[$i]);
+  $html .= bbcode_to_html($post[$i]);
   $html .= <<<HTML
      </section>
     </article>
@@ -299,6 +252,7 @@ function create_archive($db)
  <head>
   <meta charset="UTF-8">
   <title>Archive - $blog_name</title>
+  <link rel="alternate" type="application/atom+xml" title="Atom Feed" href="atom.xml">
   <link rel="stylesheet" type="text/css" href="style.css">
  </head>
  <body>
@@ -314,6 +268,7 @@ function create_archive($db)
      <ul>
       <li><a href="index.html">Blog Index</a></li>
       <li>Blog Archive</li>
+      <li><a href="atom.xml">Atom Feed</a></li>
       <li><a href="admin">Admin Area</a></li>
      </ul>
     </nav>

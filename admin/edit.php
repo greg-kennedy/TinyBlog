@@ -64,9 +64,25 @@
      <label for="post">Post</label>
      <br>
      <textarea name="post"><?php echo htmlspecialchars($post, ENT_HTML5) ?></textarea>
-     <button>Save</button>
-     <a href="index.php">Cancel</a>
+     <br>
+     <button>Save</button> / <a href="index.php">Cancel</a>
     </form>
+    <aside id="reference">
+     <b>BBCode Reference</b>
+     <ul>
+      <li>[b] - Bold</li>
+      <li>[i] - Italic</li>
+      <li>[u] - Underline</li>
+      <li>[s] - Strikethrough</li>
+      <li>[sup] - Superscript</li>
+      <li>[sub] - Subscript</li>
+      <li>[quote] - Blockquote</li>
+      <li>[pre] - Preformatted</li>
+      <li>[img (width=X) (height=Y)]http://example.com/image.jpg[/img] - Embed Image</li>
+      <li>[url]http://example.com[/img] - Simple URL</li>
+      <li>[url=http://example.com]Link Description[/img] - Named URL</li>
+     </ul>
+    </aside>
    </article>
   </main>
  </body>

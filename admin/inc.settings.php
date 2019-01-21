@@ -20,7 +20,11 @@ define('SETTINGS', [
   ['password', 'Admin Password', TYPE_PASSWORD, 'admin', REBUILD_NONE ],
   ['blog_name', 'Blog Name', TYPE_STRING, 'TinyBlog', REBUILD_INDEX | REBUILD_FEED ],
   ['blog_author', 'Blog Author', TYPE_STRING, 'TinyBlog', REBUILD_FEED ],
-  ['blog_url', 'Blog URL', TYPE_STRING, (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]", REBUILD_FEED ],
+  ['blog_url', 'Blog URL', TYPE_STRING,
+    (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") .
+    '://' .
+    (isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : 'localhost') .
+    (isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : ''), REBUILD_FEED ],
   ['index_size', 'Index Posts', TYPE_INTEGER, 5, REBUILD_INDEX ],
 ]);
 

@@ -12,7 +12,7 @@ It is stupidly complex and inefficient to require a full CMS to recreate that ex
 TinyBlog does things differently.  All blog pages are static .html files, containing no Javascript, and no dynamic server-side code.  There is an sqlite3 database, but only for the Admin Area: it is used when making a new post or site changes, to rebuild touched pages from scratch.
 
 ## Requirements
-* PHP 5+
+* PHP 7+
 * PHP sqlite3 extension
 
 ## Installation
@@ -27,3 +27,5 @@ TinyBlog does things differently.  All blog pages are static .html files, contai
 
 ## License
 TinyBlog is licensed under the 3-clause "Revised" BSD license.  Please see `LICENSE` for more information.
+
+TinyBlog uses php-bbcode for BBCode to HTML translation.  This parser is public domain, and an external site for it is maintained here: https://github.com/greg-kennedy/php-bbcode
